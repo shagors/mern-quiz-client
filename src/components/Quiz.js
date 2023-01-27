@@ -1,4 +1,5 @@
 import React from 'react';
+import Questions from './Questions';
 
 const Quiz = () => {
 
@@ -15,6 +16,8 @@ const Quiz = () => {
       <h1 className='title text-light'>Your Quiz</h1>
 
       {/* Display questions */}
+      <Questions />
+
       <div className='grid'>
         <button className='btn prev' onClick={onPrev}>Previous</button>
         <button className='btn next' onClick={onNext}>Next</button>
