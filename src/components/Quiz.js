@@ -4,10 +4,10 @@ import { useSelector } from 'react-redux';
 
 const Quiz = () => {
 
-  const { questions } = useSelector(state => state);
+  const state = useSelector(state => state);
 
   useEffect( () => {
-    console.log(questions.queue);
+    // console.log(state);
   } , []);
 
   const onNext = () => {
