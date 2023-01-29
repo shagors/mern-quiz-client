@@ -1,37 +1,71 @@
-import React, { useEffect } from 'react';
-import Questions from './Questions';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react'
+import Questions from './Questions'
 
-const Quiz = () => {
+import { MoveNextQuestion, MovePrevQuestion } from '../hooks/FetchQuestion';
+import { PushAnswer } from '../hooks/setResult';
 
-  const state = useSelector(state => state);
+/** redux store import */
+import { useSelector, useDispatch } from 'react-redux'
+import { Navigate } from 'react-router-dom'
 
-  useEffect( () => {
-    // console.log(state);
-  } , []);
+export default function Quiz() {
 
-  const onNext = () => {
-    console.log('You clicked Next Button');
-  }
+    const [check, setChecked] = useState(undefined)
 
-  const onPrev = () => {
-    console.log('You clicked Prev Button');
-  }
+    const result = useSelector(state => state.result.result);
+    const { queue, trace } = useSelector(state => state.questions);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        console.log(result)
+    })
+
+    /** next button event handler */
+    function onNext(){
+        console.log('On next click')
+
+        if(trace < queue.length){
+            /** increase the trace value by one using MoveNextAction */
+            dispatch(MoveNextQuestion());
+
+            /** insert a new result in the array.  */
+            if(result.length <= trace){
+                dispatch(PushAnswer(check))
+            }
+        }
+        
+    }
+
+    /** Prev button event handler */
+    function onPrev(){
+        console.log('On onPrev click')
+        if(trace > 0){
+            /** decrease the trace value by one using MovePrevQuestion */
+            dispatch(MovePrevQuestion());
+        }
+    }
+
+    function onChecked(check){
+        console.log(check)
+        setChecked(check)
+    }
+
+    /** finished exam after the last question */
+    if(result.length && result.length >= queue.length){
+        return <Navigate to={'/result'} replace={true}></Navigate>
+    }
 
   return (
     <div className='container'>
-      <h1 className='title text-light'>Your Quiz</h1>
+        <h1 className='title text-light'>Quiz Application</h1>
 
-      {/* Display questions */}
-      <Questions />
+        {/* display questions */}
+        <Questions onChecked={onChecked} />
 
-      <div className='grid'>
-        <button className='btn prev' onClick={onPrev}>Previous</button>
-        <button className='btn next' onClick={onNext}>Next</button>
-      </div>
-
+        <div className='grid'>
+            <button className='btn prev' onClick={onPrev}>Prev</button>
+            <button className='btn next' onClick={onNext}>Next</button>
+        </div>
     </div>
   )
 }
-
-export default Quiz;
