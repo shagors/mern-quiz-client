@@ -22,7 +22,6 @@ export default function Quiz() {
 
     /** next button event handler */
     function onNext(){
-        console.log('On next click')
 
         if(trace < queue.length){
             /** increase the trace value by one using MoveNextAction */
@@ -38,7 +37,6 @@ export default function Quiz() {
 
     /** Prev button event handler */
     function onPrev(){
-        console.log('On onPrev click')
         if(trace > 0){
             /** decrease the trace value by one using MovePrevQuestion */
             dispatch(MovePrevQuestion());
@@ -63,7 +61,7 @@ export default function Quiz() {
         <Questions onChecked={onChecked} />
 
         <div className='grid'>
-            <button className='btn prev' onClick={onPrev}>Prev</button>
+            { trace > 0 ? <button className='btn prev' onClick={onPrev}>Prev</button> : <div></div> }
             <button className='btn next' onClick={onNext}>Next</button>
         </div>
     </div>
