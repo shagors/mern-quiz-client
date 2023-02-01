@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { attempts_Number, earnPoints_Number, flagResult } from '../helper/helper';
+import { usePublishResult } from '../hooks/setResult';
 import { resetAllAction } from '../redux/question_reducer';
 import { resetResultAction } from '../redux/result_reducer';
 import '../styles/Result.css';
@@ -12,14 +13,13 @@ const Result = () => {
   const dispatch = useDispatch();
   const { questions : { queue, answers }, result : {result, userId} } = useSelector(state => state);
 
-  useEffect(() => {
-    console.log(flag);
-  }, []);
-
   const totalPoints = queue.length * 10;
   const attempts = attempts_Number(result);
   const earnPoints = earnPoints_Number(result, answers, 10);
   const flag = flagResult(totalPoints, earnPoints);
+
+  //** store user result */
+  usePublishResult({result, userName : userId, attempts, points : earnPoints, achived : flag ? "Passed" : "Failed"});
 
   const onRestart = () => {
     dispatch(resetAllAction());
